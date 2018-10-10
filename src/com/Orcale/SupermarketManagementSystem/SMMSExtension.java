@@ -11,7 +11,7 @@ import com.oraclesdp.common.SystemIn;
 /**
  * @author 安(an) 这是一个基于控制台的简易的超市管理系统
  */
-public class SMMS {
+public class SMMSExtension {
 
 	/**
 	 *  在类里面定义一些变量，用来记录程序运行时需要使用的数据 
@@ -147,11 +147,48 @@ public class SMMS {
 
 		if (number != 0) {
 			System.out.println("超市商品：");
-			System.out.println(" 商品名称  " + " 商品价格 " + " 商品数量 " + " 商品日期 ");
-			for (int i = 0; i < number; i++) {
-				System.out.println("  " + productName[i] + "          " + productPrice[i] + "          "
-						+ productNumber[i] + "          " + productDate[i]);
+			
+			System.out.println("1.显示全部商品");
+			System.out.println("2.显示价格区间的商品");
+			System.out.println("请输入您选择：");
+			int showProductType = SystemIn.nextInt();
+			
+			switch(showProductType) {
+			case 1:{
+				System.out.println(" 商品名称  " + " 商品价格 " + " 商品数量 " + " 商品日期 ");
+				
+				for (int i = 0; i < number; i++) {
+					System.out.println("  " + productName[i] + "          " + productPrice[i] + "          "
+							+ productNumber[i] + "          " + productDate[i]);
+				}
+				break;
 			}
+			case 2:{
+				//输入要显示的商品的价格区间
+				System.out.println("请输入价格区间：");
+				System.out.println("最低价格：");
+				int minPrice = SystemIn.nextInt();
+				System.out.println("最高价格：");
+				int maxPrice = SystemIn.nextInt();
+				
+				System.out.println(" 商品名称  " + " 商品价格 " + " 商品数量 " + " 商品日期 ");
+				
+				for (int i = 0; i < number; i++) {
+					if (productPrice[i] >= minPrice && productPrice[i] <= maxPrice) {
+						System.out.println("  " + productName[i] + "          " + productPrice[i] + "          "
+								+ productNumber[i] + "          " + productDate[i]);
+					}else {
+						continue;
+					}
+				}
+				break;
+			}
+			default:{
+				System.err.println("输入错误！请重新输入：");// 没有这个选择，输入错误，要求重新输入
+				showProduct();
+			}
+			}
+			
 		} else {
 			System.err.println("超市没有商品，请及时添加商品！");
 
@@ -192,7 +229,7 @@ public class SMMS {
 
 		// 如果超市已有该商品，不能再添加
 		for (int i = 0; i < number; i++) {
-			if (SMMS.productName[i].equals(productName)) {
+			if (SMMSExtension.productName[i].equals(productName)) {
 				System.err.println("超市已有该商品，不能再添加！");
 				System.err.println("请重新添加：");
 				addProduct();
@@ -205,10 +242,10 @@ public class SMMS {
 		int productNumber = SystemIn.nextInt();
 		SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-		SMMS.productName[number] = productName;
-		SMMS.productPrice[number] = productPrice;
-		SMMS.productNumber[number] = productNumber;
-		SMMS.productDate[number] = time.format(new Date());
+		SMMSExtension.productName[number] = productName;
+		SMMSExtension.productPrice[number] = productPrice;
+		SMMSExtension.productNumber[number] = productNumber;
+		SMMSExtension.productDate[number] = time.format(new Date());
 
 		number++;
 
@@ -234,7 +271,7 @@ public class SMMS {
 
 	}
 
-	/**
+    /**
 	 * 修改商品
 	 */
 	public static void modifyProduct() {
@@ -251,34 +288,95 @@ public class SMMS {
 				System.out.println("  " + productName[i] + "          " + productPrice[i] + "          "
 						+ productNumber[i] + "          " + productDate[i]);
 
-				// 填写修改后的的商品信息
-				System.out.println("修改后的商品信息：");
-				System.out.println("请输入商品名称：");
-				String productName = SystemIn.nextLine();
+				//选择商品的修改类型
+				System.out.println("修改商品信息：");
+				System.out.println("1.修改商品全部信息");
+				System.out.println("2.修改商品名称");
+				System.out.println("3.修改商品价格");
+				System.out.println("4.修改商品数量");
+				System.out.println("请输入你的选择：");
+				int modifyProductType = SystemIn.nextInt();
+				
+				switch(modifyProductType){
+					case 1:{
+						//修改商品的全部信息
+						// 填写修改后的的商品信息
+						System.out.println("修改后的商品信息：");
+						System.out.println("请输入商品名称：");
+						String productName = SystemIn.nextLine();
 
-				// 修改后的商品名称不能与已有商品重名
-				for (int n = 0; n < number; n++) {
-					if (SMMS.productName[i].equals(productName)) {
-						System.err.println("商品名称与已有商品重名！");
-						System.err.println("请重新修改：");
+						// 修改后的商品名称不能与已有商品重名
+						for (int n = 0; n < number; n++) {
+							if (SMMSExtension.productName[i].equals(productName)) {
+								System.err.println("商品名称与已有商品重名！");
+								System.err.println("请重新修改：");
+								modifyProduct();
+							}
+						}
+
+						System.out.println("请输入商品价格：");
+						double productPrice = SystemIn.nextDouble();
+						System.out.println("请输入商品数量：");
+						int productNumber = SystemIn.nextInt();
+						SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+						SMMSExtension.productName[i] = productName;
+						SMMSExtension.productPrice[i] = productPrice;
+						SMMSExtension.productNumber[i] = productNumber;
+						SMMSExtension.productDate[i] = time.format(new Date());
+
+						break;
+					}
+					case 2:{
+						//只修改商品的名称
+						// 填写修改后的的商品信息
+						System.out.println("修改后的商品信息：");
+						System.out.println("请输入商品名称：");
+						String productName = SystemIn.nextLine();
+
+						// 修改后的商品名称不能与已有商品重名
+						for (int n = 0; n < number; n++) {
+							if (SMMSExtension.productName[i].equals(productName)) {
+								System.err.println("商品名称与已有商品重名！");
+								System.err.println("请重新修改：");
+								modifyProduct();
+							}
+						}
+
+						SMMSExtension.productName[i] = productName;
+					
+						break;
+					}
+					case 3:{
+						//只修改商品的价格
+						// 填写修改后的的商品信息
+						System.out.println("修改后的商品信息：");
+						System.out.println("请输入商品价格：");
+						double productPrice = SystemIn.nextDouble();
+					
+						SMMSExtension.productPrice[i] = productPrice;
+
+						break;
+					}
+					case 4:{
+						//只修改商品的数量
+						// 填写修改后的的商品信息
+						System.out.println("修改后的商品信息：");
+						System.out.println("请输入商品数量：");
+						int productNumber = SystemIn.nextInt();
+
+						SMMSExtension.productNumber[i] = productNumber;
+
+						break;
+					}
+					default: {
+						System.err.println("输入错误！请重新输入：");// 没有这个选择，输入错误，要求重新输入
 						modifyProduct();
 					}
+					}
+					
 				}
 
-				System.out.println("请输入商品价格：");
-				double productPrice = SystemIn.nextDouble();
-				System.out.println("请输入商品数量：");
-				int productNumber = SystemIn.nextInt();
-				SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-
-				SMMS.productName[i] = productName;
-				SMMS.productPrice[i] = productPrice;
-				SMMS.productNumber[i] = productNumber;
-				SMMS.productDate[i] = time.format(new Date());
-
-				break;
-			}
-		}
 		// 在超市中没有找到商品时
 		if (i == number) {
 			System.err.println("超市没有此商品！");
@@ -302,8 +400,9 @@ public class SMMS {
 			modifyProduct();
 		}
 		}
+		
+		}
 	}
-
 	/**
 	 * 删除商品
 	 */
