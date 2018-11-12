@@ -10,20 +10,21 @@ public class FileTree {
 		try {
 			for(int i = 0;i < child.length;i++) {
 				File childFile = new File(path, child[i]);
-				file(childFile.getAbsolutePath(), ceng);
-				ceng = ceng + 3;
-				if(f.isDirectory()) {
-						for(int n = 0;n < ceng;n++) {
-							System.out.print(" ");
-						}
-						System.out.println(childFile.getName());
-				}else {
-					for(int n = 0;n < ceng;n++){
+				ceng = ceng + 10;
+				if(childFile.isDirectory()) {
+					for(int n = 0;n < ceng;n++) {
 						System.out.print(" ");
 					}
-					System.out.println(childFile.getName());
-				}
 				
+				System.out.println("文件夹----" + childFile.getName());
+				file(childFile.getAbsolutePath(), ceng);
+				}else {
+					for(int n = 0;n < ceng;n++) {
+						System.out.print(" ");
+					}
+					System.out.println("文件****" + childFile.getName());
+				}
+				ceng = ceng - 10;
 			}
 		}catch (NullPointerException e) {
 		}
